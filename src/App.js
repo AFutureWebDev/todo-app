@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 // import FirstComponent from './firstComponent';
@@ -7,13 +7,35 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isOn: false
+      text: '',
+      isClicked: false,
+      todos: []
     }
   }
 
-  toggle = () => {
-    this.setState({isOn: !this.state.isOn})
+  onClick = () => {
+    this.setState({
+    isClicked: true,
+    todos: this.state.todos.concat(this.state.text),
+    text: '',
+   })
   }
+
+  onChange = (event) => {
+    this.setState({
+      text: event.target.value
+    });
+  }
+
+  // doneItem = () => {
+  //   console.log("button was pressed")
+  //   this.setState({
+  //     isClicked: true,
+  //     todos: this.state.todos.splice(this.state.text)
+  //   })
+  // }
+
+
 
   render() {
     console.log("***THIS IS STATE***", this.state.isOn)
@@ -21,8 +43,15 @@ class App extends Component {
       <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1>Hello World</h1>
-        <button onClick={this.render.toggle}>Submit</button>
+
+        {this.state.todos.map(function(value){
+          return (
+            <p>{value} <button onClick={this.state.todos.splice(this.state.text)}>Done</button></p>
+          );
+        })}
+
+        <input value={this.state.text} onChange={this.onChange}/>
+        <button onClick={this.onClick}>Submit</button>
       </header>
     </div>
     );
