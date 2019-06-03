@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Todo from './todo';
 // import FirstComponent from './firstComponent';
 
 class App extends Component {
@@ -13,7 +14,15 @@ class App extends Component {
     }
   }
 
-  onClick = () => {
+  // Writing in the todo
+  userInput = (event) => {
+    this.setState({
+      text: event.target.value
+    });
+  }
+
+  // Function that handles what happens when you hit the submit button
+  handleSubmit = () => {
     this.setState({
     isClicked: true,
     todos: this.state.todos.concat(this.state.text),
@@ -21,21 +30,20 @@ class App extends Component {
    })
   }
 
-  onChange = (event) => {
-    this.setState({
-      text: event.target.value
-    });
+  // Function to take the first item in the array and remove it
+  deleteTodo = (index) =>{
+    const removeTodo = this.state.todos;
+    removeTodo.splice(index, 1);
+    this.setState({todos:removeTodo})
   }
 
-  // doneItem = () => {
-  //   console.log("button was pressed")
-  //   this.setState({
-  //     isClicked: true,
-  //     todos: this.state.todos.splice(this.state.text)
-  //   })
-  // }
-
-
+  // Visually creates the todo list
+  renderList=() => {
+    return this.state.todos.map((item) => {
+      return <p>{item}</p>
+    })
+  }
+  
 
   render() {
     console.log("***THIS IS STATE***", this.state.isOn)
@@ -43,15 +51,17 @@ class App extends Component {
       <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-
-        {this.state.todos.map(function(value){
-          return (
-            <p>{value} <button onClick={this.state.todos.splice(this.state.text)}>Done</button></p>
-          );
-        })}
-
-        <input value={this.state.text} onChange={this.onChange}/>
-        <button onClick={this.onClick}>Submit</button>
+        {this.renderList()}
+        {this.state.todos.map((todo, index ) =>(
+          <Todo
+            text={todo.text}
+            index={index}
+            key={index}
+            deleteTodo = {this.deleteTodo}
+          />
+        ))}
+        <input value={this.state.text} onChange={this.userInput}/>
+        <button onClick={this.handleSubmit}>Submit</button>
       </header>
     </div>
     );
@@ -61,4 +71,3 @@ class App extends Component {
 
 export default App;
 
-// <FirstComponent/>
